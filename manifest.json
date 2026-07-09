@@ -3,12 +3,11 @@
     "name": "URL Habit Limiter",
     "version": "0.1.0",
     "description": "Set daily limits on the URLs that eat your time. Privacy-first, fully offline.",
-    "permissions": ["storage"],
-    "icons": {
-        "16": "icons/icon16.png",
-        "32": "icons/icon32.png",
-        "48": "icons/icon48.png",
-        "128": "icons/icon128.png"
+    "permissions": ["storage", "tabs"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
     },
     "content_scripts": [
         {
@@ -16,5 +15,11 @@
             "js": ["content.js"],
             "run_at": "document_start"
         }
-    ]
+    ],
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    }
 }
