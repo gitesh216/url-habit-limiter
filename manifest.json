@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "URL Habit Limiter",
+    "version": "0.1.0",
+    "description": "Set daily limits on the URLs that eat your time. Privacy-first, fully offline.",
+    "permissions": ["storage"],
+    "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    }
+}
