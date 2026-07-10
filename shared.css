@@ -1,0 +1,113 @@
+:root {
+    --uhl-paper: #fafaf8;
+    --uhl-paper-raised: #ffffff;
+    --uhl-ink: #1c1e1b;
+    --uhl-ink-muted: #6b675e;
+    --uhl-line: #e4e1da;
+
+    --uhl-ok: #2b6e5e; /* on track */
+    --uhl-ok-tint: #e4f0ec;
+    --uhl-warn: #c97a2b; /* approaching limit */
+    --uhl-warn-tint: #fbeee0;
+    --uhl-danger: #a33b3b; /* blocked */
+    --uhl-danger-tint: #f6e6e6;
+
+    --uhl-font-display:
+        "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        system-ui, sans-serif;
+    --uhl-font-body:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --uhl-font-mono:
+        ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+
+    --uhl-radius-sm: 8px;
+    --uhl-radius-md: 12px;
+    --uhl-radius-lg: 20px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--uhl-paper);
+    color: var(--uhl-ink);
+    font-family: var(--uhl-font-body);
+}
+
+.uhl-eyebrow {
+    font-family: var(--uhl-font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--uhl-ink-muted);
+}
+
+.uhl-btn {
+    font-family: var(--uhl-font-body);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 14px;
+    border-radius: var(--uhl-radius-sm);
+    border: 1px solid var(--uhl-line);
+    background: var(--uhl-paper-raised);
+    color: var(--uhl-ink);
+    cursor: pointer;
+    transition:
+        transform 0.08s ease,
+        border-color 0.15s ease;
+}
+.uhl-btn:hover {
+    border-color: var(--uhl-ink);
+}
+.uhl-btn:active {
+    transform: scale(0.97);
+}
+
+.uhl-btn-primary {
+    background: var(--uhl-ink);
+    color: var(--uhl-paper);
+    border-color: var(--uhl-ink);
+}
+.uhl-btn-primary:hover {
+    border-color: var(--uhl-ink);
+    opacity: 0.9;
+}
+
+.uhl-btn-danger {
+    color: var(--uhl-danger);
+    border-color: var(--uhl-danger);
+    background: var(--uhl-danger-tint);
+}
+
+.uhl-input,
+.uhl-select {
+    font-family: var(--uhl-font-body);
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: var(--uhl-radius-sm);
+    border: 1px solid var(--uhl-line);
+    background: var(--uhl-paper-raised);
+    color: var(--uhl-ink);
+    width: 100%;
+}
+.uhl-input:focus,
+.uhl-select:focus {
+    outline: 2px solid var(--uhl-ok);
+    outline-offset: 1px;
+    border-color: var(--uhl-ok);
+}
+
+.uhl-card {
+    background: var(--uhl-paper-raised);
+    border: 1px solid var(--uhl-line);
+    border-radius: var(--uhl-radius-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}

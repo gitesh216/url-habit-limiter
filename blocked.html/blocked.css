@@ -1,0 +1,46 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blocked-root {
+    max-width: 420px;
+    text-align: center;
+    padding: 40px;
+}
+
+.ring-hero {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.blocked-title {
+    font-family: var(--uhl-font-display);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 8px 0 10px;
+    letter-spacing: -0.01em;
+}
+
+.blocked-summary {
+    font-size: 14px;
+    color: var(--uhl-ink-muted);
+    line-height: 1.6;
+    margin: 0 0 24px;
+}
+
+.blocked-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 18px;
+}
+
+.blocked-footnote {
+    font-family: var(--uhl-font-mono);
+    font-size: 11px;
+    color: var(--uhl-ink-muted);
+}

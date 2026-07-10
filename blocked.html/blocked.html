@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Limit reached — URL Habit Limiter</title>
+        <link rel="stylesheet" href="../shared.css" />
+        <link rel="stylesheet" href="blocked.css" />
+    </head>
+    <body>
+        <main class="blocked-root">
+            <div class="ring-hero" id="ringHero"></div>
+            <p class="uhl-eyebrow">Limit reached</p>
+            <h1 id="ruleName" class="blocked-title">
+                This is today's stopping point
+            </h1>
+            <p id="blockedSummary" class="blocked-summary"></p>
+            <div class="blocked-actions">
+                <button id="closeBtn" class="uhl-btn uhl-btn-primary">
+                    Close this tab
+                </button>
+                <button id="manageBtn" class="uhl-btn">
+                    Adjust this limit
+                </button>
+            </div>
+            <p class="blocked-footnote">
+                The count resets at midnight, local time.
+            </p>
+        </main>
+        <script src="blocked.js" type="module"></script>
+    </body>
+</html>
