@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>URL Habit Limiter — Settings</title>
+        <link rel="stylesheet" href="../shared.css" />
+        <link rel="stylesheet" href="options.css" />
+    </head>
+    <body>
+        <div class="options-root">
+            <header class="options-header">
+                <p class="uhl-eyebrow">URL Habit Limiter</p>
+                <h1 class="options-title">Rules &amp; settings</h1>
+                <p class="options-sub">
+                    Everything here stays on this device. Nothing is synced or
+                    sent anywhere.
+                </p>
+            </header>
+
+            <section class="options-section">
+                <div class="section-head">
+                    <h2>Rules</h2>
+                    <button id="newRuleBtn" class="uhl-btn uhl-btn-primary">
+                        + New rule
+                    </button>
+                </div>
+                <div id="rulesTable" class="rules-table"></div>
+            </section>
+
+            <section class="options-section">
+                <div class="section-head"><h2>Warning threshold</h2></div>
+                <div class="uhl-card settings-card">
+                    <label class="settings-label" for="warnThreshold">
+                        Warn me once I reach
+                        <input
+                            id="warnThreshold"
+                            class="uhl-input threshold-input"
+                            type="number"
+                            min="1"
+                            max="100" />
+                        % of a daily limit
+                    </label>
+                </div>
+            </section>
+
+            <section class="options-section">
+                <div class="section-head"><h2>Usage history</h2></div>
+                <div id="historyTable" class="history-table uhl-card"></div>
+            </section>
+        </div>
+
+        <!-- Add/Edit rule modal -->
+        <dialog id="ruleModal" class="rule-modal">
+            <form id="ruleForm" method="dialog">
+                <h3 id="modalTitle">New rule</h3>
+
+                <label class="field-label"
+                    >Name
+                    <input
+                        id="fieldName"
+                        class="uhl-input"
+                        placeholder="e.g. YouTube Shorts"
+                        required />
+                </label>
+
+                <label class="field-label"
+                    >URL pattern
+                    <input
+                        id="fieldPattern"
+                        class="uhl-input mono-input"
+                        placeholder="youtube.com/shorts/*"
+                        required />
+                    <span class="field-hint"
+                        >Use * as a wildcard. Matches are case-insensitive and
+                        ignore protocol/www.</span
+                    >
+                </label>
+
+                <label class="field-label"
+                    >Daily limit (visits)
+                    <input
+                        id="fieldLimit"
+                        class="uhl-input"
+                        type="number"
+                        min="1"
+                        value="10"
+                        required />
+                </label>
+
+                <label class="field-label"
+                    >Redirect to (optional)
+                    <input
+                        id="fieldRedirect"
+                        class="uhl-input mono-input"
+                        placeholder="Leave blank for the default blocked page" />
+                </label>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancelBtn" class="uhl-btn">
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        id="saveBtn"
+                        class="uhl-btn uhl-btn-primary">
+                        Save rule
+                    </button>
+                </div>
+            </form>
+        </dialog>
+
+        <script src="options.js" type="module"></script>
+    </body>
+</html>
