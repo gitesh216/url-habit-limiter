@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>URL Habit Limiter</title>
+        <link rel="stylesheet" href="../shared.css" />
+        <link rel="stylesheet" href="popup.css" />
+    </head>
+    <body>
+        <div class="popup-root">
+            <header class="popup-header">
+                <div>
+                    <p class="uhl-eyebrow">Today</p>
+                    <h1 class="popup-title">Your limits</h1>
+                </div>
+                <button id="optionsBtn" class="uhl-btn" title="Manage rules">
+                    Manage
+                </button>
+            </header>
+
+            <div id="ruleList" class="rule-list">
+                <!-- populated by popup.js -->
+            </div>
+
+            <div id="emptyState" class="empty-state" hidden>
+                <p class="empty-title">No rules yet</p>
+                <p class="empty-body">
+                    Add a URL pattern — like
+                    <span class="mono">youtube.com/shorts/*</span> — to start
+                    limiting it.
+                </p>
+                <button id="addFirstRuleBtn" class="uhl-btn uhl-btn-primary">
+                    Add your first rule
+                </button>
+            </div>
+
+            <footer class="popup-footer">
+                <button id="exportBtn" class="uhl-btn">Export stats</button>
+                <span class="footer-note"
+                    >Runs fully on-device. No data leaves your browser.</span
+                >
+            </footer>
+        </div>
+        <script src="popup.js" type="module"></script>
+    </body>
+</html>
