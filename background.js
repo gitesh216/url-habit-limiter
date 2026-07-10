@@ -1,9 +1,24 @@
 import { getRules, getSettings } from "./utils/storage.js";
 import { findMatchingRule } from "./utils/rules.js";
-import { recordVisit } from "./utils/tracker.js";
+import { recordVisit, getCount } from "./utils/tracker.js";
+import { scheduleMidnightReset, handleAlarm } from "./utils/reset.js";
+
+// Avoid re-processing the exact same URL twice in quick succession when both
+// tabs.onUpdated and a content-script message fire for the same load.
+const recentlyProcessed = new Map(); // tabId -> { url, at }
+const RECENT_WINDOW_MS = 500;
+
+function alreadyProcessed(tabId, url) {
+    const entry = recentlyProcessed.get(tabId);
+    if (entry && entry.url === url && Date.now() - entry.at < RECENT_WINDOW_MS)
+        return true;
+    recentlyProcessed.set(tabId, { url, at: Date.now() });
+    return false;
+}
 
 async function handleNavigation(tabId, url) {
     if (!url || !/^https?:\/\//i.test(url)) return;
+    if (alreadyProcessed(tabId, url)) return;
 
     const rules = await getRules();
     const rule = findMatchingRule(url, rules);
@@ -12,7 +27,7 @@ async function handleNavigation(tabId, url) {
         return;
     }
 
-    const { count } = await recordVisit(rule);
+    const { count } = await recordVisit(rule, url);
     updateBadge(tabId, count, rule.dailyLimit);
 
     if (count > rule.dailyLimit) {
@@ -76,11 +91,42 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     }
 });
 
+chrome.tabs.onActivated.addListener(async ({ tabId }) => {
+    try {
+        const tab = await chrome.tabs.get(tabId);
+        if (tab.url) handleNavigation(tabId, tab.url);
+    } catch {
+        /* tab may have closed */
+    }
+});
+
 // --- SPA navigation, reported by content.js via history API patching ---
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message?.type === "UHL_URL_CHANGED" && sender.tab?.id != null) {
         handleNavigation(sender.tab.id, message.url);
         sendResponse({ ok: true });
     }
+    if (message?.type === "UHL_GET_STATUS_FOR_TAB" && sender.tab?.id != null) {
+        (async () => {
+            const rules = await getRules();
+            const rule = findMatchingRule(message.url, rules);
+            if (!rule) return sendResponse({ matched: false });
+            const count = await getCount(rule.id);
+            sendResponse({
+                matched: true,
+                ruleName: rule.name,
+                count,
+                limit: rule.dailyLimit,
+            });
+        })();
+        return true; // keep the message channel open for the async response
+    }
     return false;
+});
+
+// --- Daily reset scheduling ---
+chrome.runtime.onInstalled.addListener(() => scheduleMidnightReset());
+chrome.runtime.onStartup.addListener(() => scheduleMidnightReset());
+chrome.alarms.onAlarm.addListener((alarm) => {
+    handleAlarm(alarm);
 });

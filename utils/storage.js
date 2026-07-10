@@ -6,6 +6,7 @@ const KEYS = {
 
 const DEFAULT_SETTINGS = {
     warnThresholdPercent: 80, // warn the user once they cross this % of their limit
+    historyRetentionDays: 30, // how many days of archived stats to keep for export
 };
 
 function getLocalDateString(date = new Date()) {
@@ -83,6 +84,45 @@ async function saveSettings(settings) {
     return merged;
 }
 
+async function archiveDailyStats(stats) {
+    const res = await storageGet(KEYS.STATS_HISTORY);
+    const history = res[KEYS.STATS_HISTORY] || {};
+    history[stats.date] = stats;
+
+    const settings = await getSettings();
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - settings.historyRetentionDays);
+    const cutoffStr = getLocalDateString(cutoff);
+    for (const dateKey of Object.keys(history)) {
+        if (dateKey < cutoffStr) delete history[dateKey];
+    }
+
+    await storageSet({ [KEYS.STATS_HISTORY]: history });
+    return history;
+}
+
+async function getStatsHistory() {
+    const res = await storageGet(KEYS.STATS_HISTORY);
+    return res[KEYS.STATS_HISTORY] || {};
+}
+
+// Full export payload for the "export usage statistics" user story.
+async function exportAllData() {
+    const [rules, dailyStats, history, settings] = await Promise.all([
+        getRules(),
+        getDailyStats(),
+        getStatsHistory(),
+        getSettings(),
+    ]);
+    return {
+        exportedAt: new Date().toISOString(),
+        rules,
+        todayStats: dailyStats,
+        history,
+        settings,
+    };
+}
+
 export {
     KEYS,
     DEFAULT_SETTINGS,
@@ -94,4 +134,7 @@ export {
     saveDailyStats,
     getSettings,
     saveSettings,
+    archiveDailyStats,
+    getStatsHistory,
+    exportAllData,
 };
