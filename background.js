@@ -1,4 +1,4 @@
-import { getRules } from "./utils/storage.js";
+import { getRules, getSettings } from "./utils/storage.js";
 import { findMatchingRule } from "./utils/rules.js";
 import { recordVisit } from "./utils/tracker.js";
 
@@ -17,6 +17,23 @@ async function handleNavigation(tabId, url) {
 
     if (count > rule.dailyLimit) {
         redirectToBlocked(tabId, rule, count);
+        return;
+    }
+
+    const settings = await getSettings();
+    const percent = (count / rule.dailyLimit) * 100;
+    if (percent >= settings.warnThresholdPercent) {
+        chrome.tabs
+            .sendMessage(tabId, {
+                type: "UHL_SHOW_WARNING",
+                ruleName: rule.name,
+                count,
+                limit: rule.dailyLimit,
+                remaining: Math.max(0, rule.dailyLimit - count),
+            })
+            .catch(() => {
+                /* content script may not be ready yet - non-fatal */
+            });
     }
 }
 

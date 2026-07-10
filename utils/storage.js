@@ -1,6 +1,11 @@
 const KEYS = {
     RULES: "rules",
     DAILY_STATS: "dailyStats",
+    SETTINGS: "settings",
+};
+
+const DEFAULT_SETTINGS = {
+    warnThresholdPercent: 80, // warn the user once they cross this % of their limit
 };
 
 function getLocalDateString(date = new Date()) {
@@ -67,12 +72,26 @@ async function saveDailyStats(stats) {
     return stats;
 }
 
+async function getSettings() {
+    const res = await storageGet(KEYS.SETTINGS);
+    return { ...DEFAULT_SETTINGS, ...(res[KEYS.SETTINGS] || {}) };
+}
+
+async function saveSettings(settings) {
+    const merged = { ...(await getSettings()), ...settings };
+    await storageSet({ [KEYS.SETTINGS]: merged });
+    return merged;
+}
+
 export {
     KEYS,
+    DEFAULT_SETTINGS,
     getLocalDateString,
     emptyDailyStats,
     getRules,
     saveRules,
     getDailyStats,
     saveDailyStats,
+    getSettings,
+    saveSettings,
 };
